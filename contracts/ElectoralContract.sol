@@ -17,6 +17,11 @@ contract ElectoralContract {
     Candidate[] private candidates;
     string[] private candidateNames;
 
+    constructor(string[] memory _candidateNames) {
+        for (uint256 i = 0; i < _candidateNames.length; i++)
+            addCandidate(_candidateNames[i]);
+    }
+
     function addCandidate(string memory candidateName) public {
         candidates.push(
             Candidate({candidateName: candidateName, voteCount: 0})
@@ -41,9 +46,9 @@ contract ElectoralContract {
         return candidateNames;
     }
 
-    function vote(uint voterId, uint candidateId) public {
+    function vote(uint256 voterId, uint256 candidateId) public {
         require(!voters[voterId].hasVoted);
-        for (uint i = 0; i < candidates.length; i++) {
+        for (uint256 i = 0; i < candidates.length; i++) {
             if (i != candidateId) continue;
             candidates[i].voteCount++;
             voters[voterId].hasVoted = true;

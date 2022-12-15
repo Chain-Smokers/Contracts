@@ -8,12 +8,27 @@ describe("ElectoralContract", () => {
     const ElectoralContract = await ethers.getContractFactory(
       "ElectoralContract"
     );
-    const electoralContract = await ElectoralContract.deploy();
+    const electoralContract = await ElectoralContract.deploy([]);
     await electoralContract.deployed();
     return { ElectoralContract, electoralContract };
   };
 
-  it("Add Candidate", async () => {
+  it("Should add candidates on deployment", async () => {
+    const ElectoralContract = await ethers.getContractFactory(
+      "ElectoralContract"
+    );
+    const electoralContract = await ElectoralContract.deploy([
+      "John Doe",
+      "Jane Doe",
+    ]);
+    await electoralContract.deployed();
+    expect(await electoralContract.getCandidates()).to.eql([
+      "John Doe",
+      "Jane Doe",
+    ]);
+  });
+
+  it("Should add candidate", async () => {
     const { electoralContract } = await loadFixture(deployContractFixture);
 
     expect(await electoralContract.getCandidates()).to.eql([]);
@@ -21,7 +36,7 @@ describe("ElectoralContract", () => {
     expect(await electoralContract.getCandidates()).to.eql(["John Doe"]);
   });
 
-  it("Add Voter", async () => {
+  it("Should add voter", async () => {
     const { electoralContract } = await loadFixture(deployContractFixture);
 
     expect(await electoralContract.getVoters()).to.eql([]);
@@ -29,7 +44,7 @@ describe("ElectoralContract", () => {
     expect(await electoralContract.getVoters()).to.eql(["Jane Doe"]);
   });
 
-  it("Cast Vote", async () => {
+  it("Should cast vote", async () => {
     const { electoralContract } = await loadFixture(deployContractFixture);
 
     await electoralContract.addCandidate("John Doe");

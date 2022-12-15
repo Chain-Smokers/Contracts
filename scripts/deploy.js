@@ -6,7 +6,13 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Token = await ethers.getContractFactory("ElectoralContract");
-  const token = await Token.deploy();
+  const token = await Token.deploy([
+    "Tony Stark",
+    "Steve Rogers",
+    "Bruce Banner",
+    "Clint Barton",
+    "NOTA",
+  ]);
 
   console.log("Token address:", token.address);
 }
