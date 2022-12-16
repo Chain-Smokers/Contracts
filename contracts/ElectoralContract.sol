@@ -48,6 +48,10 @@ contract ElectoralContract {
         return candidateNames;
     }
 
+    function getVotersDetailed() public view returns (Voter[] memory) {
+        return voters;
+    }
+
     function vote(uint256 voterId, uint256 candidateId) public {
         require(!voters[voterId].hasVoted);
         for (uint256 i = 0; i < candidates.length; i++) {
