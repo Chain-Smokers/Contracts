@@ -1,3 +1,5 @@
+const data = require("./data.json");
+
 async function main() {
   const [deployer] = await ethers.getSigners();
 
@@ -6,13 +8,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Token = await ethers.getContractFactory("ElectoralContract");
-  const token = await Token.deploy([
-    "Tony Stark",
-    "Steve Rogers",
-    "Bruce Banner",
-    "Clint Barton",
-    "NOTA",
-  ]);
+  const token = await Token.deploy(data.candidates, data.voters);
 
   console.log("Token address:", token.address);
 }

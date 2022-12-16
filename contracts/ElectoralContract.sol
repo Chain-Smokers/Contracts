@@ -17,9 +17,11 @@ contract ElectoralContract {
     Candidate[] private candidates;
     string[] private candidateNames;
 
-    constructor(string[] memory _candidateNames) {
+    constructor(string[] memory _candidateNames, string[] memory _voterNames) {
         for (uint256 i = 0; i < _candidateNames.length; i++)
             addCandidate(_candidateNames[i]);
+        for (uint256 i = 0; i < _voterNames.length; i++)
+            addVoter(_voterNames[i]);
     }
 
     function addCandidate(string memory candidateName) public {

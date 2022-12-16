@@ -8,21 +8,25 @@ describe("ElectoralContract", () => {
     const ElectoralContract = await ethers.getContractFactory(
       "ElectoralContract"
     );
-    const electoralContract = await ElectoralContract.deploy([]);
+    const electoralContract = await ElectoralContract.deploy([], []);
     await electoralContract.deployed();
     return { ElectoralContract, electoralContract };
   };
 
-  it("Should add candidates on deployment", async () => {
+  it("Should add candidates and voters on deployment", async () => {
     const ElectoralContract = await ethers.getContractFactory(
       "ElectoralContract"
     );
-    const electoralContract = await ElectoralContract.deploy([
-      "John Doe",
-      "Jane Doe",
-    ]);
+    const electoralContract = await ElectoralContract.deploy(
+      ["Tony Stark", "Steve Rogers"],
+      ["John Doe", "Jane Doe"]
+    );
     await electoralContract.deployed();
     expect(await electoralContract.getCandidates()).to.eql([
+      "Tony Stark",
+      "Steve Rogers",
+    ]);
+    expect(await electoralContract.getVoters()).to.eql([
       "John Doe",
       "Jane Doe",
     ]);
