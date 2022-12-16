@@ -54,14 +54,26 @@ describe("ElectoralContract", () => {
     await electoralContract.addCandidate("John Doe");
     await electoralContract.addVoter("Jane Doe");
 
-    const preResults = await electoralContract.getResult();
-    expect(preResults[0].candidateName).to.equal("John Doe");
-    expect(preResults[0].voteCount).to.equal(ethers.BigNumber.from("0"));
+    const preResultsCandidate = await electoralContract.getResult();
+    expect(preResultsCandidate[0].candidateName).to.equal("John Doe");
+    expect(preResultsCandidate[0].voteCount).to.equal(
+      ethers.BigNumber.from("0")
+    );
+
+    const preResultsVoter = await electoralContract.getVotersDetailed();
+    expect(preResultsVoter[0].voterName).to.equal("Jane Doe");
+    expect(preResultsVoter[0].hasVoted).to.equal(false);
 
     await electoralContract.vote(0, 0);
 
-    const postResults = await electoralContract.getResult();
-    expect(postResults[0].candidateName).to.equal("John Doe");
-    expect(postResults[0].voteCount).to.equal(ethers.BigNumber.from("1"));
+    const postResultsCandidate = await electoralContract.getResult();
+    expect(postResultsCandidate[0].candidateName).to.equal("John Doe");
+    expect(postResultsCandidate[0].voteCount).to.equal(
+      ethers.BigNumber.from("1")
+    );
+
+    const postResultsVoter = await electoralContract.getVotersDetailed();
+    expect(postResultsVoter[0].voterName).to.equal("Jane Doe");
+    expect(postResultsVoter[0].hasVoted).to.equal(true);
   });
 });
