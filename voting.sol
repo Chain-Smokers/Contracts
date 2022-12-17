@@ -52,8 +52,9 @@ contract ElectoralContract {
     function login(uint256 voterId,string memory _password) public returns (bool) {
         require(!voters[voterId].isLoggedIn, "User Already Logged In");
         require(keccak256(abi.encodePacked(voters[voterId].voterPassword)) == keccak256(abi.encodePacked(_password)),"Invalid Credentials");
-        voters[voterId].isLoggedIn == true;
-        return true;
+        require(!voters[voterId].hasVoted,"Voter already voted");
+        voters[voterId].isLoggedIn = true;
+        return voters[voterId].isLoggedIn;
     }
 
     function logout(uint256 voterId) public {
@@ -77,13 +78,10 @@ contract ElectoralContract {
     }
 
     function vote(uint256 voterId, uint256 candidateId) public {
-        require(!voters[voterId].hasVoted);
-        require(voters[voterId].isLoggedIn);
-        for (uint256 i = 0; i < candidates.length; i++) {
-            if (i != candidateId) continue;
-            candidates[i].voteCount++;
-            voters[voterId].hasVoted = true;
-            break;
-        }
+        require(!voters[voterId].hasVoted, "voter already voted");
+        require(voters[voterId].isLoggedIn,"voter is not logged In");
+        candidates[candidateId].voteCount++;
+        voters[voterId].hasVoted = true;
+        voters[voterId].isLoggedIn = false;
     }
 }
