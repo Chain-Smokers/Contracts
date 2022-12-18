@@ -1,0 +1,39 @@
+{
+  "candidates": [
+    "Tony Stark",
+    "Steve Rogers",
+    "Bruce Banner",
+    "Clint Barton",
+    "NOTA"
+  ],
+  "voters": [
+    "Yash",
+    "Shree",
+    "Arvind",
+    "Gaurav",
+    "Shrikant",
+    "Mahant",
+    "Abhilash",
+    "Vedant",
+    "Viraj",
+    "Atharva",
+    "Indrajeet",
+    "Amogh",
+    "Mohit"
+  ],
+  "passwords": [
+    "passwordYash",
+    "passwordShree",
+    "passwordArvind",
+    "passwordGaurav",
+    "passwordShrikant",
+    "passwordMahant",
+    "passwordAbhilash",
+    "passwordVedant",
+    "passwordViraj",
+    "passwordAtharva",
+    "passwordIndrajeet",
+    "passwordAmogh",
+    "passwordMohit"
+  ]
+}
