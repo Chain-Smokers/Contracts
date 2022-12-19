@@ -3,6 +3,7 @@ pragma solidity ^0.8.17;
 
 contract ElectoralContract {
     struct Voter {
+        uint voterId;
         string voterName;
         bool hasVoted;
         bool isLoggedIn;
@@ -19,11 +20,10 @@ contract ElectoralContract {
     Candidate[] private candidates;
     string[] private candidateNames;
 
-    constructor(
-        string[] memory _candidateNames,
-        string[] memory _voterNames,
-        string[] memory _password
-    ) {
+    address public admin;
+
+    constructor(string[] memory _candidateNames, string[] memory _voterNames, string[] memory _password) {
+        admin = msg.sender;
         for (uint256 i = 0; i < _candidateNames.length; i++)
             addCandidate(_candidateNames[i]);
         for (uint256 i = 0; i < _voterNames.length; i++)
@@ -31,45 +31,39 @@ contract ElectoralContract {
     }
 
     function addCandidate(string memory candidateName) public {
+        require(
+            msg.sender == admin,
+            "Only admin can add candidates."
+        );
         candidates.push(
             Candidate({candidateName: candidateName, voteCount: 0})
         );
         candidateNames.push(candidateName);
     }
 
-    function addVoter(
-        string memory voterName,
-        string memory voterPassword
-    ) public {
+    function addVoter(string memory voterName, string memory voterPassword) public returns(uint){
         voters.push(
-            Voter({
-                voterName: voterName,
-                hasVoted: false,
-                voterPassword: voterPassword,
-                isLoggedIn: false
-            })
-        );
+            Voter(
+                {
+                    voterId: voters.length,
+                    voterName: voterName, 
+                    hasVoted: false,
+                    voterPassword: voterPassword,
+                    isLoggedIn : false
+                    }
+                )
+            );
         voterNames.push(voterName);
+        getVoterId(voters.length-1);
+        return voters.length - 1;
     }
 
-    function login(
-        uint256 voterId,
-        string memory _password
-    ) public returns (bool) {
-        require(!voters[voterId].isLoggedIn, "Voter is not logged in");
-        require(
-            keccak256(abi.encodePacked(voters[voterId].voterPassword)) ==
-                keccak256(abi.encodePacked(_password)),
-            "Invalid Credentials"
-        );
-        require(!voters[voterId].hasVoted, "Voter already voted");
+    function login(uint256 voterId,string memory _password) public returns (bool) {
+        require(!voters[voterId].isLoggedIn, "User Already Logged In");
+        require(keccak256(abi.encodePacked(voters[voterId].voterPassword)) == keccak256(abi.encodePacked(_password)),"Invalid Credentials");
+        require(!voters[voterId].hasVoted,"Voter already voted");
         voters[voterId].isLoggedIn = true;
         return voters[voterId].isLoggedIn;
-    }
-
-    function logout(uint256 voterId) public {
-        require(voters[voterId].isLoggedIn, "Voter is not logged in");
-        voters[voterId].isLoggedIn = false;
     }
 
     function getResult() public view returns (Candidate[] memory) {
@@ -88,11 +82,16 @@ contract ElectoralContract {
         return voters;
     }
 
-    function vote(uint256 voterId, uint256 candidateId) public {
-        require(!voters[voterId].hasVoted, "Voter already voted");
-        require(voters[voterId].isLoggedIn, "Voter is not logged in");
+    function vote(uint256 voterId, uint256 candidateId) public returns (bool){
+        require(!voters[voterId].hasVoted, "voter already voted");
+        require(voters[voterId].isLoggedIn,"voter is not logged In");
         candidates[candidateId].voteCount++;
         voters[voterId].hasVoted = true;
-        logout(voterId);
+        voters[voterId].isLoggedIn = false;
+        return true;
+    }
+
+    function getVoterId(uint256 voterId) public view returns (uint256){
+        return voterId;
     }
 }
