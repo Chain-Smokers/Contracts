@@ -8,11 +8,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Token = await ethers.getContractFactory("ElectoralContract");
-  const token = await Token.deploy(
-    data.candidates,
-    data.voters,
-    data.passwords
-  );
+  const token = await Token.deploy(data.candidates, data.voters);
 
   console.log("Token address:", token.address);
 }
