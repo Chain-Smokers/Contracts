@@ -7,6 +7,8 @@ contract ElectoralContract {
         bool hasVoted;
         bool isLoggedIn;
         string voterPassword;
+        address nodeAddress;
+        uint timestamp;
     }
 
     struct Candidate {
@@ -46,7 +48,9 @@ contract ElectoralContract {
                 voterName: voterName,
                 hasVoted: false,
                 voterPassword: voterPassword,
-                isLoggedIn: false
+                isLoggedIn: false,
+                nodeAddress: 0x0000000000000000000000000000000000000000,
+                timestamp: 0
             })
         );
         voterNames.push(voterName);
@@ -88,11 +92,13 @@ contract ElectoralContract {
         return voters;
     }
 
-    function vote(uint256 voterId, uint256 candidateId) public {
+    function vote(uint256 voterId, uint256 candidateId, uint timestamp) public {
         require(!voters[voterId].hasVoted, "Voter already voted");
         require(voters[voterId].isLoggedIn, "Voter is not logged in");
         candidates[candidateId].voteCount++;
         voters[voterId].hasVoted = true;
+        voters[voterId].nodeAddress = msg.sender;
+        voters[voterId].timestamp = timestamp;
         logout(voterId);
     }
 }
