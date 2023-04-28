@@ -8,8 +8,8 @@
     "test:light": "hardhat test",
     "test": "hardhat coverage",
     "clean": "hardhat clean",
-    "deploy:local": "hardhat run --network localhost scripts/deploy.js",
-    "deploy:production": "hardhat run --network cloud scripts/deploy.js"
+    "deploy:local": "hardhat run --network localhost scripts/deploy.ts",
+    "deploy:production": "hardhat run --network cloud scripts/deploy.ts"
   },
   "repository": {
     "type": "git",

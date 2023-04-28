@@ -78,7 +78,7 @@ describe("ElectoralContract", () => {
     expect(preResultsVoter[0].hasVoted).to.equal(false);
 
     await electoralContract.login(0, "passwordJane");
-    await electoralContract.vote(0, 0);
+    await electoralContract.vote(0, 0, 0);
 
     const postResultsCandidate = await electoralContract.getResult();
     expect(postResultsCandidate[0].candidateName).to.equal("John Doe");
