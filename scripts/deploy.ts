@@ -11,6 +11,7 @@ const data = require("./data.json")
 async function main() {
   const Lock = await hre.ethers.getContractFactory("ElectoralContract");
   const lock = await Lock.deploy([],[],[]);
+  // const lock = await Lock.deploy(data.candidates, data.voters, data.passwords);
 
   await lock.deployed();
 
